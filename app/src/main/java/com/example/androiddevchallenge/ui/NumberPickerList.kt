@@ -78,9 +78,11 @@ fun NumberPickerList(numbers: List<Int>, selectedItem: (Int) -> Unit) {
             coroutineScope.launch {
                 // 85
                 if (firstVisibleItemScrollOffset.value < 85 / 2) {
-                    listState.animateScrollToItem(firstVisibleItemIndex.value)
+                    if (listState.layoutInfo.totalItemsCount == 0)
+                        return@launch
+                    listState.animateScrollToItem(index = firstVisibleItemIndex.value)
                 } else {
-                    listState.animateScrollToItem(firstVisibleItemIndex.value + 1)
+                    listState.animateScrollToItem(index = firstVisibleItemIndex.value + 1)
                 }
             }
         }

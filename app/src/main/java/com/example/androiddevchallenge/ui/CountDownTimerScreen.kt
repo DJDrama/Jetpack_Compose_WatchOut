@@ -143,7 +143,7 @@ fun SelectTime(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Row {
-                    NumberPickerList(numbers = (-1..25).toList()) {
+                    NumberPickerList(numbers = HOUR_LIST) {
                         viewModel.hour = it
                     }
 
@@ -151,14 +151,14 @@ fun SelectTime(
                 }
 
                 Row {
-                    NumberPickerList(numbers = (-1..61).toList()) {
+                    NumberPickerList(numbers = MINUTE_LIST) {
                         viewModel.minute = it
                     }
 
                     Text(text = "m", modifier = Modifier.align(Alignment.CenterVertically))
                 }
                 Row {
-                    NumberPickerList(numbers = (-1..61).toList()) {
+                    NumberPickerList(numbers = SECOND_LIST) {
                         viewModel.second = it
                     }
 
