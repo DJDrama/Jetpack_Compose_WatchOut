@@ -18,10 +18,14 @@ package com.example.androiddevchallenge
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.androiddevchallenge.ui.CountDownTimerScreen
 import com.example.androiddevchallenge.ui.theme.MyTheme
@@ -30,8 +34,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyTheme {
-                MyApp()
+            val isDarkTheme = remember { mutableStateOf(false) }
+            MyTheme(darkTheme = isDarkTheme.value) {
+                MyApp(isDarkTheme)
             }
         }
     }
@@ -39,9 +44,12 @@ class MainActivity : AppCompatActivity() {
 
 // Start building your app here!
 @Composable
-fun MyApp() {
-    Surface(color = MaterialTheme.colors.background) {
-        CountDownTimerScreen()
+fun MyApp(isDarkTheme: MutableState<Boolean>) {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colors.background
+    ) {
+        CountDownTimerScreen(isDarkTheme = isDarkTheme)
     }
 }
 
@@ -49,7 +57,7 @@ fun MyApp() {
 @Composable
 fun LightPreview() {
     MyTheme {
-        MyApp()
+        MyApp(mutableStateOf(false))
     }
 }
 
@@ -57,6 +65,6 @@ fun LightPreview() {
 @Composable
 fun DarkPreview() {
     MyTheme(darkTheme = true) {
-        MyApp()
+        MyApp(mutableStateOf(true))
     }
 }

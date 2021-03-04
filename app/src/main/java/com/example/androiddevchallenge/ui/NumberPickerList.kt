@@ -1,45 +1,43 @@
+/*
+ * Copyright 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.androiddevchallenge.ui
 
-import android.graphics.Color.alpha
-import android.graphics.fonts.FontStyle
-import android.util.Log
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.animateSizeAsState
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.gestures.rememberDraggableState
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.coroutineScope
+import com.example.androiddevchallenge.utils.formatTime
 import kotlinx.coroutines.launch
-import java.text.DecimalFormat
 
 @Composable
-fun NumberPickerList(numbers: List<Int>) {
+fun NumberPickerList(numbers: List<Int>, selectedItem: (Int) -> Unit) {
     val listState = rememberLazyListState(0, 0)
     val coroutineScope = rememberCoroutineScope()
 
@@ -48,8 +46,7 @@ fun NumberPickerList(numbers: List<Int>) {
     val firstVisibleItemScrollOffset =
         remember { derivedStateOf { listState.firstVisibleItemScrollOffset } }
 
-
-    val textSizeState = remember { mutableStateOf(22.sp)}
+    val textSizeState = remember { mutableStateOf(22.sp) }
 
     Box(modifier = Modifier.width(40.dp).height(96.dp)) {
         LazyColumn(
@@ -63,11 +60,12 @@ fun NumberPickerList(numbers: List<Int>) {
                 } else {
                     if (firstVisibleItemIndex.value != item) {
                         textSizeState.value = 18.sp
-                    }else{
+                    } else {
                         textSizeState.value = 22.sp
+                        selectedItem(item)
                     }
                     Text(
-                        text = String.format("%2d", item),
+                        text = formatTime(value = item),
                         fontSize = textSizeState.value,
                         modifier = Modifier.height(32.dp).fillMaxWidth(),
                         textAlign = TextAlign.Center
@@ -81,12 +79,10 @@ fun NumberPickerList(numbers: List<Int>) {
                 // 85
                 if (firstVisibleItemScrollOffset.value < 85 / 2) {
                     listState.animateScrollToItem(firstVisibleItemIndex.value)
-                }
-                else {
+                } else {
                     listState.animateScrollToItem(firstVisibleItemIndex.value + 1)
                 }
             }
         }
-
     }
 }
